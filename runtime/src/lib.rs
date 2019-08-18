@@ -97,7 +97,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("kusama"),
 	impl_name: create_runtime_str!("parity-kusama"),
 	authoring_version: 1,
-	spec_version: 1000,
+	spec_version: 1001,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 };
@@ -128,7 +128,7 @@ impl SignedExtension for OnlyStakingAndClaims {
 		-> Result<ValidTransaction, DispatchError>
 	{
 		match call {
-			Call::Staking(_) | Call::Claims(_) | Call::Sudo(_) | Call::Session(_) =>
+			Call::Staking(_) | Call::Claims(_) /* | Call::Sudo(_) */| Call::Session(_) =>
 				Ok(Default::default()),
 			_ => Err(DispatchError::NoPermission),
 		}
@@ -465,10 +465,10 @@ impl claims::Trait for Runtime {
 	type Prefix = Prefix;
 }
 
-impl sudo::Trait for Runtime {
-	type Event = Event;
-	type Proposal = Call;
-}
+// impl sudo::Trait for Runtime {
+// 	type Event = Event;
+// 	type Proposal = Call;
+// }
 
 construct_runtime!(
 	pub enum Runtime where
@@ -513,7 +513,7 @@ construct_runtime!(
 
 		// Sudo. Usable initially.
 		// RELEASE: remove this for release build.
-		Sudo: sudo,
+		// Sudo: sudo,
 	}
 );
 
