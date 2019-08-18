@@ -97,7 +97,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("kusama"),
 	impl_name: create_runtime_str!("parity-kusama"),
 	authoring_version: 1,
-	spec_version: 1000,
+	spec_version: 1001,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 };
@@ -115,25 +115,25 @@ pub fn native_version() -> NativeVersion {
 ///
 /// RELEASE: This is only relevant for the initial PoA run-in period and may be removed
 /// from the release runtime.
-#[derive(Default, Encode, Decode, Clone, Eq, PartialEq)]
-#[cfg_attr(feature = "std", derive(Debug))]
-pub struct OnlyStakingAndClaims;
-impl SignedExtension for OnlyStakingAndClaims {
-	type AccountId = AccountId;
-	type Call = Call;
-	type AdditionalSigned = ();
-	type Pre = ();
-	fn additional_signed(&self) -> rstd::result::Result<(), &'static str> { Ok(()) }
-	fn validate(&self, _: &Self::AccountId, call: &Self::Call, _: DispatchInfo, _: usize)
-		-> Result<ValidTransaction, DispatchError>
-	{
-		match call {
-			Call::Staking(_) | Call::Claims(_) | Call::Sudo(_) | Call::Session(_) =>
-				Ok(Default::default()),
-			_ => Err(DispatchError::NoPermission),
-		}
-	}
-}
+// #[derive(Default, Encode, Decode, Clone, Eq, PartialEq)]
+// #[cfg_attr(feature = "std", derive(Debug))]
+// pub struct OnlyStakingAndClaims;
+// impl SignedExtension for OnlyStakingAndClaims {
+// 	type AccountId = AccountId;
+// 	type Call = Call;
+// 	type AdditionalSigned = ();
+// 	type Pre = ();
+// 	fn additional_signed(&self) -> rstd::result::Result<(), &'static str> { Ok(()) }
+// 	fn validate(&self, _: &Self::AccountId, call: &Self::Call, _: DispatchInfo, _: usize)
+// 		-> Result<ValidTransaction, DispatchError>
+// 	{
+// 		match call {
+// 			Call::Staking(_) | Call::Claims(_) | Call::Sudo(_) | Call::Session(_) =>
+// 				Ok(Default::default()),
+// 			_ => Err(DispatchError::NoPermission),
+// 		}
+// 	}
+// }
 
 type NegativeImbalance = <Balances as Currency<AccountId>>::NegativeImbalance;
 
@@ -465,10 +465,10 @@ impl claims::Trait for Runtime {
 	type Prefix = Prefix;
 }
 
-impl sudo::Trait for Runtime {
-	type Event = Event;
-	type Proposal = Call;
-}
+// impl sudo::Trait for Runtime {
+// 	type Event = Event;
+// 	type Proposal = Call;
+// }
 
 construct_runtime!(
 	pub enum Runtime where
@@ -513,7 +513,7 @@ construct_runtime!(
 
 		// Sudo. Usable initially.
 		// RELEASE: remove this for release build.
-		Sudo: sudo,
+		// Sudo: sudo,
 	}
 );
 
@@ -530,7 +530,7 @@ pub type BlockId = generic::BlockId<Block>;
 /// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
 	// RELEASE: remove this for release build.
-	OnlyStakingAndClaims,
+	// OnlyStakingAndClaims,
 	system::CheckGenesis<Runtime>,
 	system::CheckEra<Runtime>,
 	system::CheckNonce<Runtime>,
